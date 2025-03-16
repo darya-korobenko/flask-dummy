@@ -1,6 +1,6 @@
 # flask-dummy
 
-This project locally sets up flask-dummy application which is using Grafana Alloy to send logs to Loki. The results can be validated by viewing logs in Grafana
+This project locally sets up flask-dummy application which is using Grafana Alloy to send logs to Loki. The results can be validated by viewing logs in Grafana.
 
 ## Project Structure
 
@@ -15,8 +15,9 @@ This project locally sets up flask-dummy application which is using Grafana Allo
 │   ├── Dockerfile
 │   ├── app.py
 │   └── requirements.txt
-├── README.md
+├── diagram.jpg
 ├── docker-compose.yaml
+├── README.md
 └── run_app.sh
 ```
 
@@ -48,25 +49,25 @@ This project locally sets up flask-dummy application which is using Grafana Allo
 ### flask-dummy
 - **Description**: A Flask application that listens on `localhost:8080` and sends logs to `alloy:4317` via GRPC.
 - **Files**:
-  - `flask-dummy/app.py`: Contains the Flask application code.
-  - `flask-dummy/requirements.txt`: Lists the Python dependencies required to run the Flask application.
-  - `flask-dummy/Dockerfile`: Dockerfile to build the Flask application.
+  - `./flask-dummy/app.py`: Contains the Flask application code
+  - `./flask-dummy/requirements.txt`: Lists the Python dependencies required to run the Flask application
+  - `./flask-dummy/Dockerfile`: Dockerfile to build the Flask application
 
 ### alloy
 - **Description**: Collects logs from the `flask-dummy` service and exports them to Loki.
 - **File**:
-  - `./configs/config.alloy`: Configuration file for Grafana Alloy.
+  - `./configs/config.alloy`: Configuration file for Grafana Alloy
 
 ### loki
 - **Description**: Responsible for storing the collected logs.
 - **File**:
-  - `./configs/loki-config.yaml`: Configuration file for Loki.
+  - `./configs/loki-config.yaml`: Configuration file for Loki
 
 ### grafana
 - **Description**: Provides a web interface to visualize the logs collected by Loki, listens on `localhost:3000`.
 - **Files**:
-  - `./configs/grafana/dashboards.yaml`: Provisioning configuration for Grafana dashboards.
-  - `./configs/grafana/dashboard.json`: JSON file for flask-dummy Grafana dashboard.
+  - `./configs/grafana/dashboards.yaml`: Provisioning configuration for Grafana dashboards
+  - `./configs/grafana/dashboard.json`: JSON file for flask-dummy Grafana dashboard
 
 ## Testing
 The `run_app.sh` script includes functions to test the Flask application with GET and POST requests.
