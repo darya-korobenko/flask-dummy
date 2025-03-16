@@ -1,0 +1,49 @@
+services:
+  flask-dummy:
+    build: ./flask-dummy
+    ports:
+      - "8080:8080"
+  alloy:
+    image: 'grafana/alloy:latest'
+    ports:
+      - "4317:4317"
+    volumes:
+      - ./configs/config.alloy:/etc/alloy/config.alloy
+    command: 'run --storage.path=/var/lib/alloy/data /etc/alloy/config.alloy'
+  loki:
+    image: grafana/loki:latest
+    ports:
+      - "3100:3100"
+    volumes:
+      - ./configs/loki-config.yaml:/etc/loki/config.yaml
+    command: -config.file=/etc/loki/config.yaml
+  grafana:
+    image: grafana/grafana:latest
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./configs/grafana/dashboards.yaml:/etc/grafana/provisioning/dashboards/dashboards.yaml
+      - ./configs/grafana/dashboard.json:/etc/grafana/dashboards/dashboard.json
+    environment:
+      - GF_PATHS_PROVISIONING=/etc/grafana/provisioning
+      - GF_AUTH_ANONYMOUS_ENABLED=true
+      - GF_AUTH_ANONYMOUS_ORG_ROLE=Admin
+    entrypoint:
+      - sh
+      - -euc
+      - |
+        mkdir -p /etc/grafana/provisioning/datasources
+        cat <<EOF > /etc/grafana/provisioning/datasources/ds.yaml
+        apiVersion: 1
+        datasources:
+        - name: Loki
+          type: loki
+          access: proxy
+          orgId: 1
+          url: http://loki:3100
+          basicAuth: false
+          isDefault: true
+          version: 1
+          editable: false
+        EOF
+        /run.sh
